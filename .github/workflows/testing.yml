@@ -28,7 +28,7 @@ jobs:
       - name: cat docker image version
         run: |
           echo ${{ needs.check_version.outputs.docker_image_version }}
-          echo "NEW_VERSION=0.0.0" >> $GITHUB_ENV
+          echo "NEW_VERSION=0.1.0" >> $GITHUB_ENV
 
       - name: Update changelog
         uses: superfaceai/release-changelog-action@v1
