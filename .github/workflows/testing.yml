@@ -28,14 +28,7 @@ jobs:
       - name: cat docker image version
         run: |
           echo ${{ needs.check_version.outputs.docker_image_version }}
-          myVar="${{ needs.check_version.outputs.docker_image_version }}"
-          if [[-z "$myVar"]]; then
-              echo "myVar is empty"
-              echo "NEW_VERSION=0.0.0" >> $GITHUB_ENV
-          else
-              echo "myVar is not empty"
-              echo `NEW_VERSION=${{ needs.check_version.outputs.docker_image_version }}` >> $GITHUB_ENV
-          fi
+          echo "NEW_VERSION=0.0.0" >> $GITHUB_ENV
 
       - name: Update changelog
         uses: superfaceai/release-changelog-action@v1
