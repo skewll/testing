@@ -23,12 +23,26 @@ jobs:
     needs: check_version
     runs-on: ubuntu-latest
     steps:
- 
 
       - name: cat docker image version
         run: |
           echo ${{ needs.check_version.outputs.docker_image_version }}
-          echo "NEW_VERSION=0.1.0" >> $GITHUB_ENV
+
+      - name: Bump release version
+        if: startsWith(github.event.inputs.release-type, 'pre') != true
+        run: |
+          echo "NEW_VERSION=$(npm --no-git-tag-version version $RELEASE_TYPE)" >> $GITHUB_ENV
+          echo "RELEASE_TAG=latest" >> $GITHUB_ENV
+        env:
+          RELEASE_TYPE: ${{ github.event.inputs.release-type }}
+
+      - name: Bump pre-release version
+        if: startsWith(github.event.inputs.release-type, 'pre')
+        run: |
+          echo "NEW_VERSION=$(npm --no-git-tag-version --preid=beta version $RELEASE_TYPE
+          echo "RELEASE_TAG=beta" >> $GITHUB_ENV
+        env:
+          RELEASE_TYPE: ${{ github.event.inputs.release-type }}
 
       - name: Update changelog
         uses: superfaceai/release-changelog-action@v1
